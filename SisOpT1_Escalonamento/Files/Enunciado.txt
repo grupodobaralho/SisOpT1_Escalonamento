@@ -1,0 +1,28 @@
+Trabalho 1 - Escalonamento
+Data de entrega: 19.09.2017 - com apresentação no laboratório
+
+Definição:
+
+Ler de um arquivo as seguintes informações, nesta ordem: número de processos, tamanho de fatia de tempo, e para cada processo, tempo de chegada, tempo de execução e prioridade (1 até 9).
+
+Imprimir os tempos médios de turnaround, resposta e espera para cada um dos seguintes algoritmos:
+
+           - SJF não preemptivo (desempate pela prioridade)
+
+           - Round Robin com prioridade.
+
+Além disto imprimir um gráfico (texto) mostrando como os processo foram executados. Considerar duas unidades de tempo para troca de contexto (representado abaixo como TC). Tempo começa em 0.
+
+Exemplo de arquivo de entrada:
+
+5
+3
+3 10 2
+4 12 1
+9 15 2
+11 15 1
+12 8 5
+
+Exemplo do gráfico de saída para o exemplo acima, para o algoritmo SJF:
+
+---1111111111TC55555555TC222222222222TC444444444444444TC333333333333333
