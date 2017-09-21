@@ -47,7 +47,6 @@ public class App {
 		Path path = Paths.get(arquivo);
 
 		try (Scanner sc = new Scanner(Files.newBufferedReader(path, Charset.forName("utf8")))) {
-
 			nProcessos = Integer.parseInt(sc.next());
 			tamFatiaTempo = Integer.parseInt(sc.next());
 			System.out.println(nProcessos + " " + tamFatiaTempo);
