@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Image;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -7,26 +8,32 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
 
 public class App {
 	
-	//número de processos, tamanho de fatia de tempo.
+	//numero de processos, tamanho de fatia de tempo.
 	private static int nProcessos, tamFatiaTempo;
-	//cada processo, tempo de chegada, tempo de execução e prioridade (1 até 9).
-	private static List<Processo> processos = new ArrayList<>();
+	
+	//cada processo, tempo de chegada, tempo de execucaoo e prioridade (1 ate 9).
+	private static Queue<Processo> processos = new LinkedList<>();
+	
 	//Obejto auxiliador na montagem de Strings
 	private static StringBuilder str;
 	
+	private static Escalonador escalonador;
+	
 	public static void main(String[] args) {
 		load("Files/trab-so1-teste1.txt");
-	}
-	
-	
+		escalonador = new Escalonador(processos);
+		
+	}	
 	/*
-	 * número de processos, tamanho de fatia de tempo, e para cada processo, tempo de chegada, tempo de execução e prioridade (1 até 9).
+	 * numero de processos, tamanho de fatia de tempo, e para cada processo, tempo de chegada, tempo de execucao e prioridade (1 ate 9).
 	 * 
 5
 3
@@ -36,12 +43,6 @@ public class App {
 11 15 1
 12 8 5
 	 */
-	/**
-	 * Recebe um caminho para um arquivo .txt e utiliza a classe
-	 * Scanner chamada do Sistema Operacional de leitura de arquivos
-	 * e armazena as informacoes nas variaveis globais
-	 * @param arquivo
-	 */
 	public static void load(String arquivo) {
 
 		Path path = Paths.get(arquivo);
@@ -49,11 +50,12 @@ public class App {
 		try (Scanner sc = new Scanner(Files.newBufferedReader(path, Charset.forName("utf8")))) {
 			nProcessos = Integer.parseInt(sc.next());
 			tamFatiaTempo = Integer.parseInt(sc.next());
-			System.out.println(nProcessos + " " + tamFatiaTempo);
+			//System.out.println(nProcessos + " " + tamFatiaTempo);
 			int contProcessos = 0;
 			while(contProcessos < nProcessos){
-				Processo p = new Processo(Integer.parseInt(sc.next()), Integer.parseInt(sc.next()), Integer.parseInt(sc.next()));
-				System.out.println(p.toString());
+				Processo p = new Processo(Integer.parseInt(sc.next()), Integer.parseInt(sc.next()), Integer.parseInt(sc.next()), contProcessos+1);
+				//System.out.println(p.toString());
+				processos.add(p);
 				contProcessos++;
 			}
 		} catch (IOException e) {
@@ -67,12 +69,7 @@ public class App {
 
 	}
 
-	/**
-	 * Metodo que a partir de um caminho para um arquivo .txt
-	 * chama load() para ler os dados, calcula a maior area livre de 
-	 * minas e imprime os resultados na tela
-	 * @param arquivo
-	 */
+
 	public static void fazAlgEscalonamento(String arquivo) {
 		long startTime = System.currentTimeMillis();
 		load(arquivo);
