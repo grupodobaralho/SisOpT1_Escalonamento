@@ -25,7 +25,7 @@ public class Processo {
 			this.tFinal = tFinal;
 			this.prioridade = prioridade;
 			this.id = id;
-			this.tEmExecucao = 0;
+			this.tEmExecucao = 1;
 			this.tResposta = 0;
 			this.tEspera = 0;
 			this.tTurnAround = 0;
@@ -42,9 +42,9 @@ public class Processo {
 		this.prioridade = p.getPrioridade();
 		this.id = p.getId();
 		this.tEmExecucao = p.gettEmExecucao();
-		this.tResposta = p.gettResposta();
-		this.tEspera = p.gettEspera();
-		this.tTurnAround = p.gettTurnAround();
+//		this.tResposta = p.gettResposta();
+//		this.tEspera = p.gettEspera();
+//		this.tTurnAround = p.gettTurnAround();
 	}
 
 	@Override
@@ -95,15 +95,8 @@ public class Processo {
 	public void settEmExecucao(int tEmExecucao) {
 		this.tEmExecucao = tEmExecucao;
 	}
-
-	public int gettResposta() {
-		return tResposta;
-	}
-
-	public void settResposta(int tResposta) {
-		this.tResposta = tResposta;
-	}
-
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	
 	public int gettEspera() {
 		return tEspera;
 	}
@@ -111,13 +104,22 @@ public class Processo {
 	public void settEspera(int tEspera) {
 		this.tEspera = tEspera;
 	}
-
-	public int gettTurnAround() {
-		return tTurnAround;
+	
+	public int calculaTResposta() {
+		return tEmExecucao - tChegada;
 	}
 
-	public void settTurnAround(int tTurnAround) {
-		this.tTurnAround = tTurnAround;
-	}		
+	public int calculaTEspera() {
+		return tTurnAround - tFinal;
+	}
+
+	public int calculaTurnAround(int tCompletou) {
+		this.tTurnAround = tCompletou - tResposta;
+		return tTurnAround;
+	}
+	
+	public int getTurnAround() {
+		return tTurnAround;
+	}
 
 }

@@ -32,6 +32,7 @@ public class App {
 
 	private static List<Processo> pProntos;
 	private static Processo emExecucao = null;
+	private static List<Processo> pTerminados;
 
 	private static int tGlobal = 1;
 	private static int tFinalizacao = 0;
@@ -39,16 +40,18 @@ public class App {
 	public static void main(String[] args) {
 		processos = new ArrayList<>();
 		pProntos = new ArrayList<>(processos);
-		load("Files/trab-so1-teste1.txt");
+		pTerminados = new ArrayList<>();
+		load("Files/trab-so1-teste2.txt");
 		str = new StringBuilder();
 		stf();
+		//rr();
 		System.out.println(str.toString());
 		// escalonador = new Escalonador(processos);
 	}
 
 	public static void stf() {
 		boolean terminou = false;
-	
+
 		while (!terminou) {
 			apronta();
 			Collections.sort(pProntos, Comparator.comparing(Processo::gettFinal).thenComparing(Processo::getPrioridade)
@@ -62,34 +65,95 @@ public class App {
 				if (emExecucao.gettEmExecucao() == emExecucao.gettFinal()) { // se
 																				// acabou,
 																				// tira
-					str.append(emExecucao.getId());
+					pTerminados.add(emExecucao);
 					emExecucao = null;
 				} else { // se nao acabou, atualiza o tempo de Execucao e printa
 					str.append(emExecucao.getId());
 					emExecucao.settEmExecucao(emExecucao.gettEmExecucao() + 1);
 				}
-			} else if (!pProntos.isEmpty() && emExecucao == null){
+			} else if (!pProntos.isEmpty() && emExecucao == null) {
 				emExecucao = new Processo(pProntos.get(0));
 				pProntos.remove(0);
 				str.append(emExecucao.getId());
 			} else { // Se pProntos não está vazio e
-												// emExec nao for nulo, atualiza
-												// tudo e faz TC
-				if (emExecucao.gettEmExecucao() == emExecucao.gettFinal()) { //Se finalizou faz TC
-					str.append(emExecucao.getId());
+						// emExec nao for nulo, atualiza
+						// tudo e faz TC
+				if (emExecucao.gettEmExecucao() == emExecucao.gettFinal()) { // Se
+																				// finalizou
+																				// faz
+																				// TC
 					trocaContexto();
+					Collections.sort(pProntos, Comparator.comparing(Processo::gettFinal)
+							.thenComparing(Processo::getPrioridade).thenComparing(Processo::gettChegada));
+					pTerminados.add(emExecucao);
 					emExecucao = null;
-				} else { //Se nao finalizou, printa e atualiza
+				} else { // Se nao finalizou, printa e atualiza
 					str.append(emExecucao.getId());
 					emExecucao.settEmExecucao(emExecucao.gettEmExecucao() + 1);
 				}
-			} 
+			}
 
 			// Ordenada a lista de processos em estado Pronto para priorizar por
 			// menor tempo de
 			tGlobal++;
 			somaTempoEmEspera();
-			if(processos.isEmpty() && pProntos.isEmpty() && emExecucao==null)
+			if (processos.isEmpty() && pProntos.isEmpty() && emExecucao == null)
+				terminou = true;
+		}
+
+	}
+
+	public static void rr() {
+		boolean terminou = false;
+		while (!terminou) {
+			apronta();
+			// Se pProntos está vazio e não existe processo em Exec. poe "-"
+			if (pProntos.isEmpty() && emExecucao == null) {
+				str.append("-");
+			} else if (pProntos.isEmpty()) { // Se só pProntos está vazio,
+												// atualiza emExec e printa ele
+				if (emExecucao.gettEmExecucao() == emExecucao.gettFinal()) { // se
+																				// acabou,
+																				// tira
+					str.append(emExecucao.getId());
+					pTerminados.add(emExecucao);
+					emExecucao = null;
+				} else { // se nao acabou, atualiza o tempo de Execucao e printa
+					str.append(emExecucao.getId());
+					emExecucao.settEmExecucao(emExecucao.gettEmExecucao() + 1);
+				}
+			} else if (!pProntos.isEmpty() && emExecucao == null) {
+				emExecucao = new Processo(pProntos.get(0));
+				pProntos.remove(0);
+				// str.append(emExecucao.getId());
+			} else { // Se pProntos não está vazio e
+						// emExec nao for nulo
+				if (emExecucao.gettEmExecucao() == tamFatiaTempo) {
+					pProntos.add(emExecucao);
+					str.append(emExecucao.getId());
+					trocaContexto();
+					System.out.println(emExecucao.toString());
+					emExecucao = new Processo(pProntos.get(0));
+					pProntos.remove(0);
+				} else if (emExecucao.gettEmExecucao() == emExecucao.gettFinal()) { // Se
+																					// finalizou
+																					// faz
+																					// TC
+					str.append(emExecucao.getId());
+					trocaContexto();
+					pTerminados.add(emExecucao);
+					emExecucao = null;
+				} else { // Se nao finalizou, printa e atualiza
+					str.append(emExecucao.getId());
+					emExecucao.settEmExecucao(emExecucao.gettEmExecucao() + 1);
+				}
+			}
+
+			// Ordenada a lista de processos em estado Pronto para priorizar por
+			// menor tempo de
+			tGlobal++;
+			somaTempoEmEspera();
+			if (processos.isEmpty() && pProntos.isEmpty() && emExecucao == null)
 				terminou = true;
 		}
 
@@ -102,7 +166,6 @@ public class App {
 	}
 
 	public static void apronta() {
-		// System.out.println("ProcessosFila = "+ processos);
 		for (int i = 0; i < processos.size(); i++) {
 			if (processos.get(i).gettChegada() == tGlobal) {
 				pProntos.add(processos.get(i));
@@ -110,19 +173,19 @@ public class App {
 				i--;
 			}
 		}
-		// System.out.println("ProcessosProntos = "+ pProntos);
 	}
 
 	public static void trocaContexto() {
 		int cont = 0;
-		//while (cont != 2) {
-			str.append("TC");
+		while (cont != 2) {
+			if(cont==0)
+				str.append("T");
+			else 
+				str.append("C");
 			somaTempoEmEspera();
 			apronta();
-			Collections.sort(pProntos, Comparator.comparing(Processo::gettFinal).thenComparing(Processo::getPrioridade)
-					.thenComparing(Processo::gettChegada));
 			cont++;
-		//}
+		}
 
 	}
 
@@ -138,13 +201,11 @@ public class App {
 		try (Scanner sc = new Scanner(Files.newBufferedReader(path, Charset.forName("utf8")))) {
 			nProcessos = Integer.parseInt(sc.next());
 			tamFatiaTempo = Integer.parseInt(sc.next());
-			// System.out.println(nProcessos + " " + tamFatiaTempo);
 			int contProcessos = 0;
 			while (contProcessos < nProcessos) {
 				Processo p = new Processo(Integer.parseInt(sc.next()), Integer.parseInt(sc.next()),
 						Integer.parseInt(sc.next()), contProcessos + 1);
-				// System.out.println(p.toString());
-				tFinalizacao+=p.gettFinal();
+				tFinalizacao += p.gettFinal();
 				processos.add(p);
 				contProcessos++;
 			}
@@ -156,18 +217,6 @@ public class App {
 			e1.printStackTrace();
 		}
 
-	}
-
-	public static void fazAlgEscalonamento(String arquivo) {
-		long startTime = System.currentTimeMillis();
-		load(arquivo);
-		System.out.println("Calculando Maior Area sem minas...");
-		// MaiorArea m = new MaiorArea(largura, altura, quantidade, minas);
-		// m.printa();
-		long stopTime = System.currentTimeMillis();
-		long elapsedTime = stopTime - startTime;
-		System.out.println("Tempo decorrido: " + elapsedTime);
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 	}
 
 }
