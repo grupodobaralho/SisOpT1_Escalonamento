@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class OldEscalonador {
-
+/*
 	Queue<Processo> processos;
 
 	// fila de eventos
@@ -124,4 +124,5 @@ public class OldEscalonador {
 		}
 		return false;
 	}
+	*/
 }

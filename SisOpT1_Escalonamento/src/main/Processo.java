@@ -35,12 +35,25 @@ public class Processo {
 			throw new Exception("idero invalido");
 		}
 	}
+	
+	public Processo(Processo p){
+		this.tChegada = p.gettChegada();
+		this.tFinal = p.gettFinal();
+		this.prioridade = p.getPrioridade();
+		this.id = p.getId();
+		this.tEmExecucao = p.gettEmExecucao();
+		this.tResposta = p.gettResposta();
+		this.tEspera = p.gettEspera();
+		this.tTurnAround = p.gettTurnAround();
+	}
 
 	@Override
 	public String toString() {
-		return "Processo [id=" + id + ", tChegada=" + tChegada + ", tFinal=" + tFinal + ", prioridade=" + prioridade
+		return "Processo [id=" + id + ", tChegada=" + tChegada + "]";
+		/*return "Processo [id=" + id + ", tChegada=" + tChegada + ", tFinal=" + tFinal + ", prioridade=" + prioridade
 				+ ", tEmExecucao=" + tEmExecucao + ", tResposta=" + tResposta + ", tEspera=" + tEspera
 				+ ", tTurnAround=" + tTurnAround + "]";
+				*/
 	}
 
 	public int getId() {
@@ -105,8 +118,6 @@ public class Processo {
 
 	public void settTurnAround(int tTurnAround) {
 		this.tTurnAround = tTurnAround;
-	}
-	
-		
+	}		
 
 }
