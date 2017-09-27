@@ -1,18 +1,10 @@
-package main;
+package catandoDaNet;
 
-import java.util.List;
 import java.util.Scanner;
 
-public class Escalonador {
-	
-	private List<Processo> a;
+public class Sjf {
 
-	public Escalonador(List<Processo> processos) {
-		
-	}
-
-	public void stf() {
-		
+	public static void main(String args[]) {
 		int process[] = new int[10];
 		int ptime[] = new int[10];
 		int wtime[] = new int[10];
