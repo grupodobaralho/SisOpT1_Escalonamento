@@ -43,8 +43,8 @@ public class App {
 		pTerminados = new ArrayList<>();
 		load("Files/trab-so1-teste2.txt");
 		str = new StringBuilder();
-		stf();
-		//rr();
+		//stf();
+		rr();
 		System.out.println(str.toString());
 		// escalonador = new Escalonador(processos);
 	}
@@ -129,10 +129,12 @@ public class App {
 			} else { // Se pProntos não está vazio e
 						// emExec nao for nulo
 				if (emExecucao.gettEmExecucao() == tamFatiaTempo) {
+					System.out.println(emExecucao.gettEmExecucao() + "   "+ tamFatiaTempo);
+					//emExecucao.settEmExecucao(1);  :(
 					pProntos.add(emExecucao);
 					str.append(emExecucao.getId());
 					trocaContexto();
-					System.out.println(emExecucao.toString());
+					//System.out.println(emExecucao.toString());
 					emExecucao = new Processo(pProntos.get(0));
 					pProntos.remove(0);
 				} else if (emExecucao.gettEmExecucao() == emExecucao.gettFinal()) { // Se

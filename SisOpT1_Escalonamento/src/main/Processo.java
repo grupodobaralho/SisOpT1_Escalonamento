@@ -49,7 +49,7 @@ public class Processo {
 
 	@Override
 	public String toString() {
-		return "Processo [id=" + id + ", tChegada=" + tChegada + "]";
+		return "Processo [id=" + id + ", tChegada=" + tChegada + "tFinal=" + tFinal + "tEmExecucao=" + tEmExecucao + "]";
 		/*return "Processo [id=" + id + ", tChegada=" + tChegada + ", tFinal=" + tFinal + ", prioridade=" + prioridade
 				+ ", tEmExecucao=" + tEmExecucao + ", tResposta=" + tResposta + ", tEspera=" + tEspera
 				+ ", tTurnAround=" + tTurnAround + "]";
