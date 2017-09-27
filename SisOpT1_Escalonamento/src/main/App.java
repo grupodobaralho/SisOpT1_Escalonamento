@@ -41,7 +41,7 @@ public class App {
 		processos = new ArrayList<>();
 		pProntos = new ArrayList<>(processos);
 		pTerminados = new ArrayList<>();
-		load("Files/trab-so1-teste2.txt");
+		load("Files/trab-so1-teste3.txt");
 		str = new StringBuilder();
 		//stf();
 		rr();
@@ -60,11 +60,10 @@ public class App {
 			// Se pProntos está vazio e não existe processo em Exec. poe "-"
 			if (pProntos.isEmpty() && emExecucao == null) {
 				str.append("-");
-			} else if (pProntos.isEmpty()) { // Se só pProntos está vazio,
-												// atualiza emExec e printa ele
-				if (emExecucao.gettEmExecucao() == emExecucao.gettFinal()) { // se
-																				// acabou,
-																				// tira
+				// Se só pProntos está vazio, atualiza emExec e printa ele
+			} else if (pProntos.isEmpty()) { 
+				// se acabou, tira
+				if (emExecucao.gettEmExecucao() == emExecucao.gettFinal()) { 
 					pTerminados.add(emExecucao);
 					emExecucao = null;
 				} else { // se nao acabou, atualiza o tempo de Execucao e printa
@@ -82,9 +81,7 @@ public class App {
 																				// finalizou
 																				// faz
 																				// TC
-					trocaContexto();
-					Collections.sort(pProntos, Comparator.comparing(Processo::gettFinal)
-							.thenComparing(Processo::getPrioridade).thenComparing(Processo::gettChegada));
+					trocaContexto();					
 					pTerminados.add(emExecucao);
 					emExecucao = null;
 				} else { // Se nao finalizou, printa e atualiza
@@ -187,6 +184,8 @@ public class App {
 			somaTempoEmEspera();
 			apronta();
 			cont++;
+			Collections.sort(pProntos, Comparator.comparing(Processo::gettFinal)
+					.thenComparing(Processo::getPrioridade).thenComparing(Processo::gettChegada));
 		}
 
 	}
