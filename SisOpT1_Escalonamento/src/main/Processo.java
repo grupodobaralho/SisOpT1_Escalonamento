@@ -37,8 +37,7 @@ public class Processo {
 			this.tTurnAround = 0;
 
 		} else {
-			System.out.println("Foi esse idero: " + prioridade);
-			throw new Exception("idero invalido");
+			throw new Exception("prioridade invalida");
 		}
 	}
 	
@@ -49,9 +48,6 @@ public class Processo {
 		this.id = p.getId();
 		this.tEmExecucao = p.gettEmExecucao();
 		this.tEmExecucaoFatia = 1;
-//		this.tResposta = p.gettResposta();
-//		this.tEspera = p.gettEspera();
-//		this.tTurnAround = p.gettTurnAround();
 	}
 
 	@Override
@@ -126,8 +122,6 @@ public class Processo {
 	public void settVolta(int tVolta) {
 		this.tVolta = tVolta;
 	}
-	
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 	public int gettEspera() {
 		return tEspera;
@@ -136,20 +130,7 @@ public class Processo {
 	public void settEspera(int tEspera) {
 		this.tEspera = tEspera;
 	}
-	/*
-	public int calculaTResposta() {
-		return tEmExecucao - tChegada;
-	}
 
-	public int calculaTEspera() {
-		return tTurnAround - tDeExecucao;
-	}
-
-	public int calculaTurnAround(int tCompletou) {
-		this.tTurnAround = tCompletou - tResposta;
-		return tTurnAround;
-	}
-	*/
 	public int getTurnAround() {
 		return tTurnAround;
 	}

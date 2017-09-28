@@ -1,6 +1,5 @@
 package main;
 
-import java.awt.Image;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -9,12 +8,19 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Scanner;
-import java.util.Set;
+
+/**
+ * Algoritmos de Escalonamento - SJF e RRP
+ * 
+ * @author Israel Deorce Vieira Júnior (16104279-1)
+ * @date 28/09/2017
+ * @class Sistemas Operacionais
+ * @professor Avelino Zorzo
+ * 
+ */
 
 public class App {
 
@@ -29,7 +35,6 @@ public class App {
 	private static StringBuilder str;
 
 	// private static Escalonador escalonador;
-
 	private static List<Processo> pProntos;
 	private static Processo emExecucao = null;
 	private static List<Processo> pTerminados;
@@ -42,33 +47,30 @@ public class App {
 		pTerminados = new ArrayList<>();
 		load("Files/trab-so1-teste4.txt");
 		str = new StringBuilder();
-		//sjf();
-		rr();
+		
+		//Não funcionam os dois ao mesmo tempo. Tentei arrumar mas não consegui a tempo.		
+		sjf();
+		//rr();	
+		
 		System.out.println(str.toString());
 
+		//Calculando os tempos de de TTM TRM e TRE
+		//Infelizmente não consegui implementar os valores para o RRP
 		double TTM = 0.0;
 		double TRM = 0.0;
 		double TRE = 0.0;
-
 		for (Processo p : pTerminados) {
 			TTM += p.gettFinal() - p.gettChegada();
 			TRM += p.gettEspera();
-		}		
-		
-		//Turnaround
+		}			
+		//Média Turnaround
 		System.out.printf("\nTTM %.2f\n", TTM / pTerminados.size());
-		//Resposta
+		//Média Resposta
 		System.out.printf("\nTRM %.2f\n", TRM / pTerminados.size());
-		//Espera
+		//Média Espera
 		TRE = TRM;
 		System.out.printf("\nTRE %.2f\n", TRE);
 		System.out.printf("\n%d\n", pTerminados.size());
-		
-		/*
-		double TTM = 0.0;
-		double TRM = 0.0;
-		double TEM = 0.0;
-		*/
 		
 	}
 
@@ -90,7 +92,9 @@ public class App {
 					tGlobal--;
 					pTerminados.get(pTerminados.size() - 1).settFinal(tGlobal);
 					emExecucao = null;
-				} else { // se nao acabou, atualiza o tempo de Execucao e printa
+				} 
+				// se nao acabou, atualiza o tempo de Execucao e printa
+				else { 
 					str.append(emExecucao.getId());
 					emExecucao.settEmExecucao(emExecucao.gettEmExecucao() + 1);
 				}
@@ -99,8 +103,10 @@ public class App {
 				emExecucao.settEspera(tGlobal - emExecucao.gettChegada());
 				pProntos.remove(0);
 				str.append(emExecucao.getId());
-				// Se pProntos não está vazio e emExec nao for nulo
-			} else {
+				
+			} 
+			// Se pProntos não está vazio e emExec nao for nulo
+			else {
 				// Se finalizou faz TC
 				if (emExecucao.gettEmExecucao() == emExecucao.gettDeExecucao()) {
 					trocaContexto();
@@ -139,7 +145,7 @@ public class App {
 			Collections.sort(pProntos, Comparator.comparing(Processo::getPrioridade)
 					.thenComparing(Processo::gettVolta)
 					.thenComparing(Processo::gettChegada));
-			// Se pProntos esWtá vazio e não existe processo em Exec. poe "-"
+			// Se pProntos está vazio e não existe processo em Exec. poe "-"
 			if (pProntos.isEmpty() && emExecucao == null) {
 				str.append("-");	
 			} 
@@ -151,7 +157,9 @@ public class App {
 					tGlobal--;
 					pTerminados.get(pTerminados.size() - 1).settFinal(tGlobal);
 					emExecucao = null;
-				} else { // se nao acabou, atualiza o tempo de Execucao e printa
+				} 
+				// se nao acabou, atualiza o tempo de Execucao e printa
+				else {
 					str.append(emExecucao.getId());
 					emExecucao.settEmExecucao(emExecucao.gettEmExecucao() + 1);
 					emExecucao.settEmExecucaoFatia(emExecucao.gettEmExecucaoFatia() + 1);
@@ -191,9 +199,6 @@ public class App {
 					emExecucao.settEmExecucaoFatia(emExecucao.gettEmExecucaoFatia() + 1);
 				}
 			}
-
-			// Ordenada a lista de processos em estado Pronto para priorizar por
-			// menor tempo de
 			somaTempoEmEspera();
 			apronta();
 			tGlobal++;
@@ -202,16 +207,17 @@ public class App {
 		}
 
 	}
-
+	
+	//Método que atualiza o tempo de espera dos processos em estado Pronto
 	public static void somaTempoEmEspera() {
 		pProntos.forEach(e -> {
 			e.settEspera(e.gettEspera() + 1);
 		});
 	}
 
+	//Método que traz os valores que chegam para a lista de Prontos
 	public static void apronta() {
 		for (int i = 0; i < processos.size(); i++) {
-			//System.out.println("pID E tCh: "+processos.get(i).getId()+"  "+ processos.get(i).gettChegada() + "   Tglobal: "+ tGlobal);
 			if (processos.get(i).gettChegada() == tGlobal) {
 				pProntos.add(processos.get(i));
 				processos.remove(processos.get(i));
@@ -220,6 +226,7 @@ public class App {
 		}
 	}
 
+	//Método que faz a troca de Contexto
 	public static void trocaContexto() {
 		int cont = 0;
 		while (cont != 2) {
@@ -234,12 +241,7 @@ public class App {
 
 	}
 
-	/*
-	 * numero de processos, tamanho de fatia de tempo, e para cada processo, tempo
-	 * de chegada, tempo de execucao e prioridade (1 ate 9).
-	 * 
-	 * 5 3 3 10 2 4 12 1 9 15 2 11 15 1 12 8 5
-	 */
+	//Método que chama o Sistema Operacional para fazer a leitura dos dados do arquivo .txt
 	public static void load(String arquivo) {
 		Path path = Paths.get(arquivo);
 
