@@ -40,7 +40,7 @@ public class App {
 		processos = new ArrayList<>();
 		pProntos = new ArrayList<>(processos);
 		pTerminados = new ArrayList<>();
-		load("Files/trab-so1-teste4.txt");
+		load("Files/trab-so1-teste2.txt");
 		str = new StringBuilder();
 		stf();
 		//rr();
