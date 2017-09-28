@@ -40,25 +40,39 @@ public class App {
 		processos = new ArrayList<>();
 		pProntos = new ArrayList<>(processos);
 		pTerminados = new ArrayList<>();
-		load("Files/trab-so1-teste2.txt");
+		load("Files/trab-so1-teste4.txt");
 		str = new StringBuilder();
-		stf();
-		//rr();
+		//sjf();
+		rr();
 		System.out.println(str.toString());
 
 		double TTM = 0.0;
 		double TRM = 0.0;
+		double TRE = 0.0;
 
 		for (Processo p : pTerminados) {
 			TTM += p.gettFinal() - p.gettChegada();
 			TRM += p.gettEspera();
-		}
+		}		
+		
+		//Turnaround
 		System.out.printf("\nTTM %.2f\n", TTM / pTerminados.size());
+		//Resposta
 		System.out.printf("\nTRM %.2f\n", TRM / pTerminados.size());
+		//Espera
+		TRE = TRM;
+		System.out.printf("\nTRE %.2f\n", TRE);
 		System.out.printf("\n%d\n", pTerminados.size());
+		
+		/*
+		double TTM = 0.0;
+		double TRM = 0.0;
+		double TEM = 0.0;
+		*/
+		
 	}
 
-	public static void stf() {
+	public static void sjf() {
 		boolean terminou = false;
 		apronta();
 		while (!terminou) {
