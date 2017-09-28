@@ -6,19 +6,14 @@ public class Processo {
 
 	private int tChegada;
 	private int tDeExecucao;
-	private int tFinal;
-	public int gettFinal() {
-		return tFinal;
-	}
-
-	public void settFinal(int tFinal) {
-		this.tFinal = tFinal;
-	}
-
 	private int prioridade;
+	
+	private int tFinal;
+	private int tVolta;
 
 	private int tEmExecucao;
-	
+	private int tEmExecucaoFatia;
+
 	//tEmExecucao - tChegada
 	private int tResposta;
 	
@@ -35,6 +30,8 @@ public class Processo {
 			this.prioridade = prioridade;
 			this.id = id;
 			this.tEmExecucao = 1;
+			this.tEmExecucaoFatia = 1;
+			this.tVolta = tChegada;
 			this.tResposta = 0;
 			this.tEspera = 0;
 			this.tTurnAround = 0;
@@ -51,6 +48,7 @@ public class Processo {
 		this.prioridade = p.getPrioridade();
 		this.id = p.getId();
 		this.tEmExecucao = p.gettEmExecucao();
+		this.tEmExecucaoFatia = 1;
 //		this.tResposta = p.gettResposta();
 //		this.tEspera = p.gettEspera();
 //		this.tTurnAround = p.gettTurnAround();
@@ -104,8 +102,33 @@ public class Processo {
 	public void settEmExecucao(int tEmExecucao) {
 		this.tEmExecucao = tEmExecucao;
 	}
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	
+	public int gettFinal() {
+		return tFinal;
+	}
+
+	public void settFinal(int tFinal) {
+		this.tFinal = tFinal;
+	}
+	
+	public int gettEmExecucaoFatia() {
+		return tEmExecucaoFatia;
+	}
+
+	public void settEmExecucaoFatia(int tEmExecucaoFatia) {
+		this.tEmExecucaoFatia = tEmExecucaoFatia;
+	}
+	
+	public int gettVolta() {
+		return tVolta;
+	}
+
+	public void settVolta(int tVolta) {
+		this.tVolta = tVolta;
+	}
+	
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 	public int gettEspera() {
 		return tEspera;
 	}
@@ -113,7 +136,7 @@ public class Processo {
 	public void settEspera(int tEspera) {
 		this.tEspera = tEspera;
 	}
-	
+	/*
 	public int calculaTResposta() {
 		return tEmExecucao - tChegada;
 	}
@@ -126,7 +149,7 @@ public class Processo {
 		this.tTurnAround = tCompletou - tResposta;
 		return tTurnAround;
 	}
-	
+	*/
 	public int getTurnAround() {
 		return tTurnAround;
 	}
