@@ -35,17 +35,28 @@ public class App {
 	private static List<Processo> pTerminados;
 
 	private static int tGlobal = 1;
-	private static int tFinalizacao = 0;
+	private static int tDeExecucaoizacao = 0;
 
 	public static void main(String[] args) {
 		processos = new ArrayList<>();
 		pProntos = new ArrayList<>(processos);
 		pTerminados = new ArrayList<>();
-		load("Files/trab-so1-teste3.txt");
+		load("Files/trab-so1-teste4.txt");
 		str = new StringBuilder();
-		//stf();
-		rr();
+		stf();
+		//rr();
 		System.out.println(str.toString());
+		
+		double TTM = 0.0;
+		double TRM = 0.0;
+		
+		for(Processo p : pTerminados) {
+			TTM += p.gettFinal() - p.gettChegada();
+			TRM += p.gettEspera();
+		}
+		System.out.printf("\nTTM %.2f\n", TTM/pTerminados.size());
+		System.out.printf("\nTRM %.2f\n", TRM/pTerminados.size());
+		System.out.printf("\n%d\n", pTerminados.size());
 		// escalonador = new Escalonador(processos);
 	}
 
@@ -54,7 +65,7 @@ public class App {
 
 		while (!terminou) {
 			apronta();
-			Collections.sort(pProntos, Comparator.comparing(Processo::gettFinal).thenComparing(Processo::getPrioridade)
+			Collections.sort(pProntos, Comparator.comparing(Processo::gettDeExecucao).thenComparing(Processo::getPrioridade)
 					.thenComparing(Processo::gettChegada));
 
 			// Se pProntos está vazio e não existe processo em Exec. poe "-"
@@ -63,8 +74,10 @@ public class App {
 				// Se só pProntos está vazio, atualiza emExec e printa ele
 			} else if (pProntos.isEmpty()) { 
 				// se acabou, tira
-				if (emExecucao.gettEmExecucao() == emExecucao.gettFinal()) { 
+				if (emExecucao.gettEmExecucao() == emExecucao.gettDeExecucao()) { 
 					pTerminados.add(emExecucao);
+					pTerminados.get(pTerminados.size()-1).settEspera(emExecucao.gettEspera());
+					pTerminados.get(pTerminados.size()-1).settFinal(tGlobal);
 					emExecucao = null;
 				} else { // se nao acabou, atualiza o tempo de Execucao e printa
 					str.append(emExecucao.getId());
@@ -72,17 +85,18 @@ public class App {
 				}
 			} else if (!pProntos.isEmpty() && emExecucao == null) {
 				emExecucao = new Processo(pProntos.get(0));
+				emExecucao.settEspera(tGlobal - emExecucao.gettChegada());
 				pProntos.remove(0);
 				str.append(emExecucao.getId());
 			} else { // Se pProntos não está vazio e
-						// emExec nao for nulo, atualiza
-						// tudo e faz TC
-				if (emExecucao.gettEmExecucao() == emExecucao.gettFinal()) { // Se
-																				// finalizou
-																				// faz
-																				// TC
-					trocaContexto();					
+						// emExec nao for nulo
+				// Se finalizou faz TC
+				if (emExecucao.gettEmExecucao() == emExecucao.gettDeExecucao()) {
+					trocaContexto();
 					pTerminados.add(emExecucao);
+					pTerminados.get(pTerminados.size()-1).settEspera(emExecucao.gettEspera());
+					pTerminados.get(pTerminados.size()-1).settFinal(tGlobal);
+					tGlobal++;
 					emExecucao = null;
 				} else { // Se nao finalizou, printa e atualiza
 					str.append(emExecucao.getId());
@@ -109,7 +123,7 @@ public class App {
 				str.append("-");
 			} else if (pProntos.isEmpty()) { // Se só pProntos está vazio,
 												// atualiza emExec e printa ele
-				if (emExecucao.gettEmExecucao() == emExecucao.gettFinal()) { // se
+				if (emExecucao.gettEmExecucao() == emExecucao.gettDeExecucao()) { // se
 																				// acabou,
 																				// tira
 					str.append(emExecucao.getId());
@@ -141,6 +155,7 @@ public class App {
 					str.append(emExecucao.getId());
 					trocaContexto();
 					pTerminados.add(emExecucao);
+					pTerminados.get(pTerminados.size()-1).settFinal(tGlobal);
 					emExecucao = null;
 				} else { // Se nao finalizou, printa e atualiza
 					str.append(emExecucao.getId());
@@ -166,7 +181,7 @@ public class App {
 
 	public static void apronta() {
 		for (int i = 0; i < processos.size(); i++) {
-			if (processos.get(i).gettChegada() == tGlobal) {
+			if (processos.get(i).gettChegada() >= tGlobal) {
 				pProntos.add(processos.get(i));
 				processos.remove(processos.get(i));
 				i--;
@@ -184,7 +199,7 @@ public class App {
 			somaTempoEmEspera();
 			apronta();
 			cont++;
-			Collections.sort(pProntos, Comparator.comparing(Processo::gettFinal)
+			Collections.sort(pProntos, Comparator.comparing(Processo::gettDeExecucao)
 					.thenComparing(Processo::getPrioridade).thenComparing(Processo::gettChegada));
 		}
 
@@ -206,7 +221,7 @@ public class App {
 			while (contProcessos < nProcessos) {
 				Processo p = new Processo(Integer.parseInt(sc.next()), Integer.parseInt(sc.next()),
 						Integer.parseInt(sc.next()), contProcessos + 1);
-				tFinalizacao += p.gettFinal();
+				tDeExecucaoizacao += p.gettDeExecucao();
 				processos.add(p);
 				contProcessos++;
 			}

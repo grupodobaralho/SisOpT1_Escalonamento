@@ -5,7 +5,16 @@ public class Processo {
 	private int id;
 
 	private int tChegada;
+	private int tDeExecucao;
 	private int tFinal;
+	public int gettFinal() {
+		return tFinal;
+	}
+
+	public void settFinal(int tFinal) {
+		this.tFinal = tFinal;
+	}
+
 	private int prioridade;
 
 	private int tEmExecucao;
@@ -16,13 +25,13 @@ public class Processo {
 	//tCompletou - tChegada
 	private int tTurnAround;
 	
-	//tTurnAround - tFinal
+	//tTurnAround - tDeExecucao
 	private int tEspera;
 
-	public Processo(int tChegada, int tFinal, int prioridade, int id) throws Exception {
+	public Processo(int tChegada, int tDeExecucao, int prioridade, int id) throws Exception {
 		if (prioridade >= 1 && prioridade <= 9) {
 			this.tChegada = tChegada;
-			this.tFinal = tFinal;
+			this.tDeExecucao = tDeExecucao;
 			this.prioridade = prioridade;
 			this.id = id;
 			this.tEmExecucao = 1;
@@ -38,7 +47,7 @@ public class Processo {
 	
 	public Processo(Processo p){
 		this.tChegada = p.gettChegada();
-		this.tFinal = p.gettFinal();
+		this.tDeExecucao = p.gettDeExecucao();
 		this.prioridade = p.getPrioridade();
 		this.id = p.getId();
 		this.tEmExecucao = p.gettEmExecucao();
@@ -49,8 +58,8 @@ public class Processo {
 
 	@Override
 	public String toString() {
-		return "Processo [id=" + id + ", tChegada=" + tChegada + "tFinal=" + tFinal + "tEmExecucao=" + tEmExecucao + "]";
-		/*return "Processo [id=" + id + ", tChegada=" + tChegada + ", tFinal=" + tFinal + ", prioridade=" + prioridade
+		return "Processo [id=" + id + ", tChegada=" + tChegada + "tDeExecucao=" + tDeExecucao + "tEmExecucao=" + tEmExecucao + "]";
+		/*return "Processo [id=" + id + ", tChegada=" + tChegada + ", tDeExecucao=" + tDeExecucao + ", prioridade=" + prioridade
 				+ ", tEmExecucao=" + tEmExecucao + ", tResposta=" + tResposta + ", tEspera=" + tEspera
 				+ ", tTurnAround=" + tTurnAround + "]";
 				*/
@@ -72,12 +81,12 @@ public class Processo {
 		this.tChegada = tChegada;
 	}
 
-	public int gettFinal() {
-		return tFinal;
+	public int gettDeExecucao() {
+		return tDeExecucao;
 	}
 
-	public void settFinal(int tFinal) {
-		this.tFinal = tFinal;
+	public void settDeExecucao(int tDeExecucao) {
+		this.tDeExecucao = tDeExecucao;
 	}
 
 	public int getPrioridade() {
@@ -110,7 +119,7 @@ public class Processo {
 	}
 
 	public int calculaTEspera() {
-		return tTurnAround - tFinal;
+		return tTurnAround - tDeExecucao;
 	}
 
 	public int calculaTurnAround(int tCompletou) {
