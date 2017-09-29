@@ -34,7 +34,6 @@ public class App {
 	// Obejto auxiliador na montagem de Strings
 	private static StringBuilder str;
 
-	// private static Escalonador escalonador;
 	private static List<Processo> pProntos;
 	private static Processo emExecucao = null;
 	private static List<Processo> pTerminados;
@@ -45,17 +44,17 @@ public class App {
 		processos = new ArrayList<>();
 		pProntos = new ArrayList<>(processos);
 		pTerminados = new ArrayList<>();
-		load("Files/trab-so1-teste4.txt");
+		load("Files/trab-so1-teste3.txt");
 		str = new StringBuilder();
 		
 		//Não funcionam os dois ao mesmo tempo. Tentei arrumar mas não consegui a tempo.		
-		sjf();
-		//rr();	
+		//sjf();
+		rrp();	
 		
 		System.out.println(str.toString());
 
 		//Calculando os tempos de de TTM TRM e TRE
-		//Infelizmente não consegui implementar os valores para o RRP
+		//Infelizmente não consegui implementar os tempos para o RRP
 		double TTM = 0.0;
 		double TRM = 0.0;
 		double TRE = 0.0;
@@ -68,10 +67,8 @@ public class App {
 		//Média Resposta
 		System.out.printf("\nTRM %.2f\n", TRM / pTerminados.size());
 		//Média Espera
-		TRE = TRM;
-		System.out.printf("\nTRE %.2f\n", TRE);
-		System.out.printf("\n%d\n", pTerminados.size());
-		
+		TRE = TRM / pTerminados.size();
+		System.out.printf("\nTRE %.2f\n", TRE);		
 	}
 
 	public static void sjf() {
@@ -84,9 +81,9 @@ public class App {
 			// Se pProntos está vazio e não existe processo em Exec. poe "-"
 			if (pProntos.isEmpty() && emExecucao == null) {
 				str.append("-");
-				// Se só pProntos está vazio, atualiza emExec e printa ele
+				// Se só pProntos está vazio, atualiza emExec
 			} else if (pProntos.isEmpty()) {
-				// se acabou, tira
+				// se acabou a exec do processo, tira ele
 				if (emExecucao.gettEmExecucao() == emExecucao.gettDeExecucao()) {
 					pTerminados.add(emExecucao);
 					tGlobal--;
@@ -98,6 +95,7 @@ public class App {
 					str.append(emExecucao.getId());
 					emExecucao.settEmExecucao(emExecucao.gettEmExecucao() + 1);
 				}
+			//Se só emExecucao está vazio, pega o primeiro da fila ordenada
 			} else if (!pProntos.isEmpty() && emExecucao == null) {
 				emExecucao = new Processo(pProntos.get(0));
 				emExecucao.settEspera(tGlobal - emExecucao.gettChegada());
@@ -135,7 +133,7 @@ public class App {
 
 	}
 
-	public static void rr() {
+	public static void rrp() {
 		boolean terminou = false;
 		apronta();
 		Collections.sort(pProntos, Comparator.comparing(Processo::getPrioridade)
